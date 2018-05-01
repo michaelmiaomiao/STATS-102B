@@ -29,8 +29,18 @@ X = rmvn.Choleski(200,mu,Sigma)
 Sigma
 head(X)  # to see the first MVN vectors (rows)
 
-ll = function(p, x, n) {
-  
+ll = function(p, X) {
+  mu = p[1:3]
+  sigma = matrix(c(p[4], p[5], p[6], p[5], p[7], p[8], p[6], p[8], p[9]), nrow=3)
+  n = nrow(X)
+  sum = 0
+  for (i in 1:n) {
+    sum = sum + t(X[i,] - mu) %*% solve(sigma) %*% (X[i,] - mu)
+  }
+  sum = -0.5*sum -(n/2)*log(det(sigma))
+  -1 * sum
 }
 
-minim = nlm(ll)
+ans = nlm(ll, p=c(-1.9, 0.1, 5.1, 1.1, 0.7, -1, 1.1, -0.6, 1.1), X)
+ans$estimate
+colMeans(X)
