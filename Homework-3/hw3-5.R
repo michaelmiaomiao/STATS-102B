@@ -29,6 +29,7 @@ X = rmvn.Choleski(200,mu,Sigma)
 Sigma
 head(X)  # to see the first MVN vectors (rows)
 
+# This is the log likelihood function for the multivariate normal.
 ll = function(p, X) {
   mu = p[1:3]
   sigma = matrix(c(p[4], p[5], p[6], p[5], p[7], p[8], p[6], p[8], p[9]), nrow=3)
@@ -43,4 +44,9 @@ ll = function(p, X) {
 
 ans = nlm(ll, p=c(-1.9, 0.1, 5.1, 1.1, 0.7, -1, 1.1, -0.6, 1.1), X)
 ans$estimate
-colMeans(X)
+
+mu_estimate = ans$estimate[1:3]
+sigma_estimate = matrix(c(ans$estimate[4], ans$estimate[5], ans$estimate[6], ans$estimate[5], ans$estimate[7], ans$estimate[8], ans$estimate[6], ans$estimate[8], ans$estimate[9]), nrow=3)
+cat("Our mu estimates are:\n", mu_estimate, "\n")
+cat("Our sigma estimates are:\n")
+print(sigma_estimate)
