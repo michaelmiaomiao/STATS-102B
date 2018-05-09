@@ -41,6 +41,19 @@ while(sum(pastIndicator!=indicator)!=0)
 c1   ## to see the mu's to which I converge for group 1
 c2   # to see the mus to which I converge for group 2
 
-# Final indicator and pastindicator
+# Part d: Final indicator and pastindicator
 pastIndicator
 indicator
+
+# Part e
+# Only one jackal was predicted to be a prehistoric (Thai) dog
+dogs = factor(d2[,11], labels=c("jackals", "prehistoric.dogs"))
+table(indicator, dogs)
+
+# Part f
+plot(d2[,4], d2[,6],
+     col=c("red","blue"),pch=c(23,24),main="K-means of canine data containing only two species",xlab="X4", ylab="X6")
+
+legend("topleft",c("jackal","prehistoric.dog"),pch=c(23,24))
+legend("bottomright",c("cluster 1","cluster 2"),pch=c
+       ("R","B"),col=c("red","blue"))
