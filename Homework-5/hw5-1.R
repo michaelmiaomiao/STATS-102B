@@ -45,7 +45,7 @@ while(sum(pastIndicator!=indicator)!=0)
 indicator
 pastIndicator
 
-species=factor(d2[,11], labels=c("cuons", "jackals", "prehistoric.dogs"))
+species=factor(d2[,11])
 table(indicator, species)
 
 # Part c
@@ -58,7 +58,6 @@ summary(mnv)
 # that means that there is a statistically significant difference between the three groups/clusters
 
 # Part d
-species=factor(d2[,11], labels=c("jackals","prehistoric.dogs", "cuons"))
 table(indicator, species)
 
 # Cluster 1 is jackals
@@ -72,29 +71,32 @@ X = X[,1:9]
 X.kmeans = kmeans(X, 3, nstart=20)
 cluster = X.kmeans$cluster
 cluster
-dogs = factor(d2[,11], labels=c("cuons", "jackals", "prehistoric.dogs"))
-table(cluster, dogs)
-table(indicator, species)
-
-# Cluster 1 is prehistoric dogs
-# Cluster 2 is cuons
-# Cluster 3 is jackals
+table(cluster, species)
+# Cluster 1 is jackals
+# Cluster 2 is prehistoric.dogs
+# Cluster 3 is cuons
 
 # This means that 7 cuons and 4 prehistoric dogs are misclassified.
 # This comes to a total of 11 misclassified dogs, which means the
-# kmeans algorithm does worse than our original algorithm.
+# kmeans algorithm does worse than our original algorithm (11 errors
+# for kmeans to 10 for our algorithm).
 
 # Part f
 ### From our observations, our kmeans algorithm misclassifies 11 dogs,
 ### while our original algorithm only misclassifies 10 dogs. The difference
 ### is only of one dog, so it's hard to say whether or not one of the algorithms
-### does better than the other.
-
+### does better than the other, although it seems that the kmeans algorithm is not
+### as good as our algorithm (just because it misclassifies one dog more).
 
 # Part g
 plot(X[,4], X[,6],
      col=c("red","blue","green")[unclass(indicator)],pch=c(23,24,25)[unclass(species)],
      main="K-means of jackals, prehistoric dogs, and cuons",xlab="X4", ylab="X6")
-legend("topleft",c("jackals","prehistoric", "cuons"),pch=c(23,24,25) )
+legend("topleft",c("cuons","jackals", "prehistoric.dogs"),pch=c(23,24,25) )
 legend("bottomright",c("cluster 1","cluster 2","cluster3"),pch=c
        ("R","B","G"),col=c("red","blue","green"))
+
+# As mentioned earlier:
+# Cluster 1 = jackals
+# Cluster 2 = cuons
+# Cluster 3 = prehistoric.dogs

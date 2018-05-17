@@ -1,39 +1,25 @@
-country <- read.csv("http://www.stat.ucla.edu/~jsanchez/stat102B2018/Euroemp.csv",header=TRUE,row.names=1)
+country = read.csv("http://www.stat.ucla.edu/~jsanchez/stat102B2018/Euroemp.csv",header=TRUE,row.names=1)
 country
 
-# Converts dataframe into a square matrix
-country.mat <- as.matrix(country)
-country.mat
+country.dist = dist(country[,-1])
+country.dist
 
-# It is preferable to convert the square matrix into a dist class matrix (lower diagonal)
-
-dist.Vote <- as.dist(Vote.mat)
-
-dist.Vote                       # Table 11.5
-
-# Running classic metric multidimensional scaling first (Principal Coordinate Analysis),
-
-# as described on page 210. The stress function is created here (stress.fun) 
-
-# in order to compute the stress for each dimension (k=2,3,4).
-
-stress.fun <- function(datadist,fitteddist) {
-  
+stress.fun = function(datadist,fitteddist) {
   sqrt(sum((datadist-fitteddist)^2)/sum(datadist^2))
-  
 }
 
-MDSdim2Vote.cmd <- cmdscale(dist.Vote, eig=TRUE, k=2)
+MDSdim2Vote.cmd <- cmdscale(country.dist, eig=TRUE, k=2)
 
-(stress.2d.cmd <- stress.fun(dist.Vote,dist(MDSdim2Vote.cmd$points)))
+# (stress.2d.cmd <- stress.fun(country.dist,dist(MDSdim2Vote.cmd$points)))
+(stress.2d.cmd <- stress.fun(country.dist, dist(MDSdim2Vote.cmd$points)))
 
-MDSdim3Vote.cmd <- cmdscale(dist.Vote, eig=TRUE, k=3)
+MDSdim3Vote.cmd <- cmdscale(country.dist, eig=TRUE, k=3)
 
-(stress.3d.cmd <- stress.fun(dist.Vote,dist(MDSdim3Vote.cmd$points)))
+(stress.3d.cmd <- stress.fun(country.dist, dist(MDSdim3Vote.cmd$points)))
 
-MDSdim4Vote.cmd <- cmdscale(dist.Vote, eig=TRUE, k=4)
+MDSdim4Vote.cmd <- cmdscale(country.dist, eig=TRUE, k=4)
 
-(stress.4d.cmd <- stress.fun(dist.Vote,dist(MDSdim4Vote.cmd$points)))
+(stress.4d.cmd <- stress.fun(country.dist, dist(MDSdim4Vote.cmd$points)))
 
 #
 
@@ -45,11 +31,11 @@ MDSdim4Vote.cmd <- cmdscale(dist.Vote, eig=TRUE, k=4)
 
 library(MASS)
 
-MDSdim2Vote.iso <- isoMDS(dist.Vote)        # k=2
+MDSdim2Vote.iso <- isoMDS(country.dist)        # k=2
 
-MDSdim3Vote.iso <- isoMDS(dist.Vote, k=3)
+MDSdim3Vote.iso <- isoMDS(country.dist, k=3)
 
-MDSdim4Vote.iso <- isoMDS(dist.Vote, k=4)
+MDSdim4Vote.iso <- isoMDS(country.dist, k=4)
 
 # Remark: the configuration produced by isoMDS is only determined up to rotations 
 
@@ -99,7 +85,7 @@ abline(v=0)
 
 # Producing a Shepard plot
 
-MDS2Voteiso.Shep <- Shepard(dist.Vote,MDSdim3Vote.iso$points, p=3)
+MDS2Voteiso.Shep <- Shepard(country.dist,MDSdim3Vote.iso$points, p=3)
 
 dev.new()
 
