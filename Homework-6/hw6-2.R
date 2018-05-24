@@ -1,8 +1,8 @@
-install.packages("sas7bdat")
-library(sas7bdat)
+library(haven)
 
 # Part a
-data = read.sas7bdat("http://www.stat.ucla.edu/~jsanchez/stat102B2018/bostonhousing.sas7bdat")
+data = read_sas("http://www.stat.ucla.edu/~jsanchez/stat102B2018/bostonhousing.sas7bdat")
+data = as.data.frame(data)
 data
 
 # Part b
@@ -28,13 +28,22 @@ PC = X.c%*%V
 PC
 
 # Part f
-PC = scale(PC, center=FALSE, scale=colSums(PC))
-PC
+pc1 = PC[,1]/sqrt(as.numeric(crossprod(PC[,1])))
+pc2 = PC[,2]/sqrt(as.numeric(crossprod(PC[,2])))
+pc3 = PC[,3]/sqrt(as.numeric(crossprod(PC[,3])))
+pc4 = PC[,4]/sqrt(as.numeric(crossprod(PC[,4])))
+pc5 = PC[,5]/sqrt(as.numeric(crossprod(PC[,5])))
+pc6 = PC[,6]/sqrt(as.numeric(crossprod(PC[,6])))
+pc7 = PC[,7]/sqrt(as.numeric(crossprod(PC[,7])))
+pc8 = PC[,8]/sqrt(as.numeric(crossprod(PC[,8])))
+pc9 = PC[,9]/sqrt(as.numeric(crossprod(PC[,9])))
+pc10 = PC[,10]/sqrt(as.numeric(crossprod(PC[,10])))
+pc11 = PC[,11]/sqrt(as.numeric(crossprod(PC[,11])))
+pc12 = PC[,12]/sqrt(as.numeric(crossprod(PC[,12])))
 
 # Part g
 cor(PC, X.c)
 
-# TODO: Check over this; is this right?
 # PCA is a process that uses orthogonal transformations to transform a set of correlated
 # variables into a smaller set of linearly uncorrelated variables, called principal components (PC).
 # The correlation between the PC and our centered data matrix tells us which principal components
@@ -44,7 +53,6 @@ cor(PC, X.c)
 # Part h
 cumsum(lambda)/sum(lambda)
 
-# TODO: Why? Do I need to answer that question?
 # From the output of the command above, we can see that only one PC is enough to represent
 # over 90% of the variability in our original data matrix. In fact, the first component is
 # enough to represent 0.9578049 or 95.78049% of the variability in our original data.
@@ -53,8 +61,7 @@ cumsum(lambda)/sum(lambda)
 # The X-tilde matrix has already been normalized in part f. Note: PC=X-tilde matrix
 
 # Part j
-
-model = lm(data$MedianValue~PC[,1]+PC[,2]+PC[,3]+PC[,4]+PC[,5]+PC[,6]+PC[,7]+PC[,8]+PC[,9]+PC[,10]+PC[,11]+PC[,12]-1)
+model = lm(data$MedianValue~pc1+pc2+pc3+pc4+pc5+pc6+pc7+pc8+pc9+pc10+pc11+pc12-1)
 summary(model)
 
 # Part k
@@ -62,12 +69,18 @@ coeff = summary(model)$coefficients[,1]
 coeff.sq = coeff^2
 sort(coeff.sq, decreasing=T)
 
+# By looking at the summary of the model, we see that only the principal components
+# 6, 1, and 9 have a p-value of less than 0.05, while principal components 2, 4, and
+# 11 have a p-value of less than 0.1. We will also look at the correlations of the
+# principal components to figure out which components to use.
+
 # By looking at the correlations of the principal components (which we do by squaring 
 # the coefficients and sorting it in decreasing order), we see that the principal component
-# 11 has the greatest correlation, then PC 12, PC 10, PC 9, and the rest of the components
-# have a correlation that is < 1.
+# 6 has the greatest correlation, then PC 1, PC 9, PC 2, PC 4, PC 11, etc. Using the
+# results from the summary and the correlations, we would select the principal components
+# 6, 1, and 9, since they have statistically significant p-values and their correlations
+# are the three highest.
 
-model1 = lm(data$MedianValue~PC[,11]+PC[,12]+PC[,10]+PC[,9]-1)
-summary(model1)
-
-# TODO: do we run the lm model again? How do we interpret this?
+# This is code you would run with your new linear model
+# model1 = lm(data$MedianValue~PC[,1]+PC[,6]+PC[,9]-1)
+# summary(model1)

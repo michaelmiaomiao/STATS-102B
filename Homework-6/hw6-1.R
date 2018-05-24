@@ -24,8 +24,9 @@ cumsum(lambda)/sum(lambda)
 ## we are able to capture 0.9543549 or 95.43549% of the varaibility in our original data, which
 ## satisfies the 95% threshold that Professor Sanchez wanted us to achieve.
 
+cor(PC)
 
-
-### TODO: Part c
-cor(PC, X.c)
-
+### From the correlation matrix of the X-tilde matrix, we see that multicollinearity
+### does not exist between our variables anymore, as evidenced by the very low
+### covariances between the variables. Thus we can say that the questionnaire
+### is effective in measuring the dimensions that we wanted.
